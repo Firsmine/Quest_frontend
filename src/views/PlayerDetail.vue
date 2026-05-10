@@ -76,6 +76,21 @@
 
           <div class="grid grid-cols-2 gap-4">
             <div class="p-4 border border-slate-100 rounded-lg">
+              <p class="text-slate-500 text-sm font-medium">Gender</p>
+              <p
+                class="text-lg font-bold text-blue-600"
+                :class="genderStyle(selectedPlayer.gender)"
+              >
+                {{ selectedPlayer.gender }}
+              </p>
+            </div>
+            <div class="p-4 border border-slate-100 rounded-lg">
+              <p class="text-slate-500 text-sm font-medium">Role</p>
+              <p class="text-lg font-bold text-blue-600" :class="roleStyle(selectedPlayer.role)">
+                {{ selectedPlayer.role }}
+              </p>
+            </div>
+            <div class="p-4 border border-slate-100 rounded-lg">
               <p class="text-slate-500 text-sm font-medium">Total XP</p>
               <p class="text-lg font-bold text-blue-600">{{ selectedPlayer.total_xp }} XP</p>
             </div>
@@ -89,7 +104,7 @@
         <div class="mt-8 flex justify-end">
           <button
             @click="showDetailModal = false"
-            class="bg-slate-800 text-white px-6 py-2 rounded-lg hover:bg-slate-900 transition"
+            class="bg-slate-800 text-white px-6 py-2 rounded-lg shadow-md hover:bg-slate-900 transition-all hover:translate-y-0.5"
           >
             Close
           </button>
@@ -103,12 +118,32 @@
     >
       <div class="bg-blue-50 rounded-xl p-6 w-full max-w-md shadow-lg">
         <h2 class="text-xl font-bold text-slate-800 mb-4">Add New Player</h2>
+        <label text-md text-slate-800 mb-5>Player Name:</label>
         <input
           v-model="newPlayer.name"
           type="text"
           placeholder="Player Name"
-          class="w-full border border-slate-300 rounded-lg p-2 mb-4 focus:ring-2 focus:ring-blue-500 outline-none"
+          class="w-full border border-slate-300 rounded-lg p-2 mb-4 mt-3 focus:ring-2 focus:ring-blue-500 outline-none"
         />
+        <label text-md text-slate-800 mb-5>Player Gender:</label>
+        <select
+          v-model="newPlayer.gender"
+          class="w-full border border-slate-300 rounded-lg p-2 mb-4 mt-3 focus:ring-2 focus:ring-blue-500 outline-none"
+        >
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+        <label text-md text-slate-800 mb-5>Player Role:</label>
+        <select
+          v-model="newPlayer.role"
+          class="w-full border border-slate-300 rounded-lg p-2 mb-4 mt-3 focus:ring-2 focus:ring-blue-500 outline-none"
+        >
+          <option value="fighter">Fighter</option>
+          <option value="mage">Mage</option>
+          <option value="marksman">Marksman</option>
+          <option value="support">Support</option>
+          <option value="tank">Tank</option>
+        </select>
         <div class="flex justify-end space-x-3">
           <button @click="showModal = false" class="text-slate-500 hover:text-slate-700">
             Cancel
@@ -116,7 +151,7 @@
           <button
             @click="savePlayer"
             :disabled="isSubmit"
-            class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 hover:translate-y-0.5 transition-all"
           >
             Save Player
           </button>
@@ -135,7 +170,7 @@ const loading = ref(true)
 
 // modal add player
 const showModal = ref(false)
-const newPlayer = ref({ name: '' })
+const newPlayer = ref({ name: '', gender: 'male', role: 'fighter' })
 const isSubmit = ref(false)
 
 // detail player
@@ -178,12 +213,35 @@ const savePlayer = async () => {
     }
     showModal.value = false
     newPlayer.value.name = ''
+    newPlayer.value.gender = 'male'
+    newPlayer.value.role = 'fighter'
     fetchPlayers()
   } catch (error) {
     console.error('Submit error:', error.response.data)
     alert('Gagal menyimpan: ' + (error.response.data.message || 'Internal server error'))
   } finally {
     isSubmit.value = false
+  }
+}
+
+const genderStyle = (gender) => {
+  return gender?.toLowerCase() === 'male' ? 'text-blue-600' : 'text-pink-500'
+}
+
+const roleStyle = (role) => {
+  switch (role?.toLowerCase()) {
+    case 'fighter':
+      return 'text-orange-600'
+    case 'support':
+      return 'text-emerald-500'
+    case 'marksman':
+      return 'text-red-500'
+    case 'mage':
+      return 'text-purple-600'
+    case 'tank':
+      return 'text-slate-700'
+    default:
+      return 'text-slate-600'
   }
 }
 
