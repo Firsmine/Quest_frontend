@@ -16,30 +16,71 @@
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
     </div>
 
-    <div v-else class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <table class="w-full text-left">
-        <thead class="bg-blue-400 text-slate-800 uppercase text-xs font-semibold">
-          <tr>
-            <th class="px-6 py-3">Name</th>
-            <th class="px-6 py-3">Total XP</th>
-            <th class="px-6 py-3">Action</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-200">
-          <tr v-for="player in players" :key="player.id" class="hover:bg-slate-50">
-            <td class="px-6 py-4 font-medium text-slate-800">{{ player.name }}</td>
-            <td class="px-6 py-4 text-slate-500">{{ player.total_xp }} XP</td>
-            <td class="px-6 py-4">
-              <button
-                @click="viewDetail(player.id)"
-                class="text-blue-600 hover:underline font-medium"
-              >
-                View Detail
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div v-else class="p-8">
+      <div
+        class="flex flex-col md:flex-row gap-4 mb-6 p-4 bg-white rounded-xl shadow-sm border border-slate-200"
+      >
+        <Searchbar v-model="searchQuery" placeholder="Cari nama player..." />
+
+        <div class="flex gap-2">
+          <select
+            v-model="filterGender"
+            class="border p-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">Semua Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+
+          <select
+            v-model="filterRole"
+            class="border p-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">Semua Role</option>
+            <option value="fighter">Fighter</option>
+            <option value="mage">Mage</option>
+            <option value="marksman">Marksman</option>
+            <option value="support">Support</option>
+            <option value="tank">Tank</option>
+          </select>
+
+          <select
+            v-model="sortBy"
+            class="border p-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="name-asc">Nama (A-Z)</option>
+            <option value="name-dec">Nama (Z-A)</option>
+            <option value="xp-high">XP Tertinggi</option>
+            <option value="xp-low">XP Terendah</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <table class="w-full text-left">
+          <thead class="bg-blue-400 text-slate-800 uppercase text-xs font-semibold">
+            <tr>
+              <th class="px-6 py-3">Name</th>
+              <th class="px-6 py-3">Total XP</th>
+              <th class="px-6 py-3">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr v-for="player in filterPlayers" :key="player.id" class="hover:bg-slate-50">
+              <td class="px-6 py-4 font-medium text-slate-800">{{ player.name }}</td>
+              <td class="px-6 py-4 text-slate-500">{{ player.total_xp }} XP</td>
+              <td class="px-6 py-4">
+                <button
+                  @click="viewDetail(player.id)"
+                  class="text-blue-600 hover:underline font-medium"
+                >
+                  View Detail
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div
@@ -162,10 +203,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
+import Searchbar from '@/components/Searchbar.vue'
 
 const players = ref([])
+const searchQuery = ref('')
+const filterGender = ref('all')
+const filterRole = ref('all')
+const sortBy = ref('name-asc')
 const loading = ref(true)
 
 // modal add player
@@ -189,6 +235,28 @@ const fetchPlayers = async () => {
   }
 }
 
+const filterPlayers = computed(() => {
+  let result = players.value.filter((p) => {
+    const matchSearch = p.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+    const matchGender = filterGender.value === 'all' || p.gender === filterGender.value
+    const matchRole = filterRole.value === 'all' || p.role === filterRole.value
+    return matchSearch && matchGender && matchRole
+  })
+
+  return result.sort((a, b) => {
+    if (sortBy.value === 'name-asc') {
+      return a.name.localeCompare(b.name)
+    } else if (sortBy.value === 'name-dec') {
+      return b.name.localeCompare(a.name)
+    } else if (sortBy.value === 'xp-high') {
+      return b.total_xp - a.total_xp
+    } else if (sortBy.value === 'xp-low') {
+      return a.total_xp - b.total_xp
+    }
+    return 0
+  })
+})
+
 const viewDetail = async (id) => {
   showDetailModal.value = true
   detailLoading.value = true
@@ -205,8 +273,7 @@ const viewDetail = async (id) => {
 }
 
 const savePlayer = async () => {
-  if (isSubmit.value) return
-  isSubmit.value = true
+  if (isSubmit.value) return (isSubmit.value = true)
   try {
     if (showModal.value) {
       await axios.post('http://localhost:8000/api/players', newPlayer.value)

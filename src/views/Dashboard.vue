@@ -1,4 +1,5 @@
-// list player
+<!-- list player -->
+<!-- To do: tambahkan button ke page monster dan battle, ubah susunan jadi -->
 
 <template>
   <div class="min-h-screen bg-slate-50 p-6">

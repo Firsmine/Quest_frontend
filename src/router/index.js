@@ -28,6 +28,16 @@ const router = createRouter({
       name: 'myquest',
       component: () => import('../views/MyQuest.vue'),
     },
+    {
+      path: '/monster',
+      name: 'monster',
+      component: () => import('../views/Monster.vue'),
+    },
+    {
+      path: '/battle',
+      name: 'battle',
+      component: () => import('../views/Battle.vue'),
+    },
   ],
 })
 

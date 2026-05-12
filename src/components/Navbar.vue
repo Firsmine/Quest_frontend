@@ -55,6 +55,24 @@
             My Quest
           </router-link>
         </li>
+        <li>
+          <router-link
+            to="/monster"
+            class="hover:text-blue-400 transition-colors"
+            active-class="text-blue-400"
+          >
+            Monsters
+          </router-link>
+        </li>
+        <li>
+          <router-link
+            to="/battle"
+            class="hover:text-blue-400 transition-colors"
+            active-class="text-blue-400"
+          >
+            Battle
+          </router-link>
+        </li>
       </ul>
     </div>
   </nav>

@@ -16,28 +16,39 @@
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
     </div>
 
-    <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div
-        v-for="item in achievements"
-        :key="item.id"
-        class="bg-white p-6 rounded-2xl border border-slate-200 shadow-md hover:translate-y-0.5 transition-all"
-      >
+    <div v-else class="p-8">
+      <div class="flex gap-4 mb-6">
+        <Searchbar v-model="searchAchieve" placeholder="Cari achievement..." />
+
+        <select v-model="sortXp" class="border p-2 rounded-lg">
+          <option value="high">XP Terbesar</option>
+          <option value="low">XP Terkecil</option>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div
-          class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-2xl mb-4"
+          v-for="item in filtered"
+          :key="item.id"
+          class="bg-white p-6 rounded-2xl border border-slate-200 shadow-md hover:translate-y-0.5 transition-all"
         >
-          🏆
+          <div
+            class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-2xl mb-4"
+          >
+            🏆
+          </div>
+          <h3 class="font-bold text-lg">{{ item.title }}</h3>
+          <p class="text-slate-500 text-sm mb-3">{{ item.description }}</p>
+          <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded"
+            >Required: {{ item.xp_required }} XP</span
+          >
+          <button
+            @click="openModal(item)"
+            class="block mt-4 text-amber-600 font-semibold text-sm bg-amber-100 shadow-md p-2 rounded-md hover:bg-amber-200 hover:translate-y-0.5 transition-all"
+          >
+            Edit Achievement
+          </button>
         </div>
-        <h3 class="font-bold text-lg">{{ item.title }}</h3>
-        <p class="text-slate-500 text-sm mb-3">{{ item.description }}</p>
-        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded"
-          >Required: {{ item.xp_required }} XP</span
-        >
-        <button
-          @click="openModal(item)"
-          class="block mt-4 text-amber-600 font-semibold text-sm bg-amber-100 shadow-md p-2 rounded-md hover:bg-amber-200 hover:translate-y-0.5 transition-all"
-        >
-          Edit Achievement
-        </button>
       </div>
     </div>
 
@@ -101,8 +112,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
+import Searchbar from '@/components/Searchbar.vue'
 
 const achievements = ref([])
 const loading = ref(true)
@@ -114,6 +126,20 @@ const form = ref({
   title: '',
   description: '',
   xp_required: 0,
+})
+
+const searchAchieve = ref('')
+const sortXp = ref('high')
+const filtered = computed(() => {
+  return achievements.value
+    .filter((a) => {
+      const matchSearch = a.title.toLowerCase().includes(searchAchieve.value.toLowerCase())
+      return matchSearch
+    })
+    .sort((a, b) => {
+      if (sortXp.value === 'high') return b.xp_required - a.xp_required
+      if (sortXp.value === 'low') return a.xp_required - b.xp_required
+    })
 })
 
 const fetchAchievements = async () => {

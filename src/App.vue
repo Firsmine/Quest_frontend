@@ -4,9 +4,7 @@ import Navbar from './components/Navbar.vue'
 </script>
 
 <template>
-  <header>
-    <Navbar />
-  </header>
+  <Navbar />
 
   <RouterView />
 </template>
