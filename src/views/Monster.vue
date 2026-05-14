@@ -30,10 +30,6 @@
             <tr>
               <th class="px-6 py-3">Name</th>
               <th class="px-6 py-3">HP</th>
-              <th class="px-6 py-3">Attack</th>
-              <th class="px-6 py-3">Defense</th>
-              <th class="px-6 py-3">XP Reward</th>
-              <th class="px-6 py-3">Gold Reward</th>
               <th class="px-6 py-3">Level</th>
               <th class="px-6 py-3">Action</th>
             </tr>
@@ -42,10 +38,6 @@
             <tr v-for="monster in filterMonsters" :key="monster.id" class="hover:bg-slate-50">
               <td class="px-6 py-4 font-medium text-slate-800">{{ monster.name }}</td>
               <td class="px-6 py-4 text-slate-500">{{ monster.hp }}</td>
-              <td class="px-6 py-4 text-slate-500">{{ monster.attack }}</td>
-              <td class="px-6 py-4 text-slate-500">{{ monster.defense }}</td>
-              <td class="px-6 py-4 text-slate-500">{{ monster.xp_reward }}</td>
-              <td class="px-6 py-4 text-slate-500">{{ monster.gold_reward }}</td>
               <td class="px-6 py-4 text-slate-500">{{ monster.level }}</td>
               <td class="px-6 py-4">
                 <button
@@ -56,13 +48,13 @@
                 </button>
                 <button
                   @click="openModal(monster)"
-                  class="p-2 ml-3 shadow-md text-blue-950 bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors"
+                  class="p-2 ml-7 shadow-md text-blue-950 bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors"
                 >
                   Edit
                 </button>
                 <button
                   @click="deleteMonster(monster.id)"
-                  class="p-2 ml-3 shadow-md text-red-950 bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
+                  class="p-2 ml-7 shadow-md text-red-950 bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
                 >
                   Delete
                 </button>
