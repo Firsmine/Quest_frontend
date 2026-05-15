@@ -1,4 +1,4 @@
-// get player's quest, add player's quest, complete quest (patch)
+<!-- get player's quest, add player's quest, complete quest (patch) -->
 
 <template>
   <div class="min-h-screen bg-slate-50 p-6">

@@ -1,8 +1,9 @@
-// get players, add players, detail 1 player
+<!-- get players, add players, detail 1 player -->
 
 <template>
   <div class="p-8 bg-slate-50 min-h-screen">
-    <div class="flex justify-between items-center mb-6">
+    <!-- header -->
+    <header class="flex justify-between items-center mb-6">
       <h1 class="text-slate-800 font-extrabold text-3xl mb-1">Player Management</h1>
       <button
         @click="showModal = true"
@@ -10,19 +11,23 @@
       >
         + Add Player
       </button>
-    </div>
+    </header>
 
+    <!-- loading animation -->
     <div v-if="loading" class="flex justify-center py-10">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
     </div>
 
     <div v-else class="p-8">
+      <!-- search & filter bar start -->
       <div
         class="flex flex-col md:flex-row gap-4 mb-6 p-4 bg-white rounded-xl shadow-sm border border-slate-200"
       >
         <Searchbar v-model="searchQuery" placeholder="Cari nama player..." />
 
+        <!-- filter bar start -->
         <div class="flex gap-2">
+          <!-- filter by gender -->
           <select
             v-model="filterGender"
             class="border p-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
@@ -32,6 +37,7 @@
             <option value="female">Female</option>
           </select>
 
+          <!-- filter by role -->
           <select
             v-model="filterRole"
             class="border p-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
@@ -44,6 +50,7 @@
             <option value="tank">Tank</option>
           </select>
 
+          <!-- sort by name & xp -->
           <select
             v-model="sortBy"
             class="border p-2 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
@@ -54,8 +61,11 @@
             <option value="xp-low">XP Terendah</option>
           </select>
         </div>
+        <!-- filter bar end -->
       </div>
+      <!-- search & filter bar end -->
 
+      <!-- players table start -->
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <table class="w-full text-left">
           <thead class="bg-blue-400 text-slate-800 uppercase text-xs font-semibold">
@@ -81,8 +91,10 @@
           </tbody>
         </table>
       </div>
+      <!-- players table end -->
     </div>
 
+    <!-- show detail start -->
     <div
       v-if="showDetailModal"
       class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
@@ -152,7 +164,9 @@
         </div>
       </div>
     </div>
+    <!-- show detail end -->
 
+    <!-- add player start -->
     <div
       v-if="showModal"
       class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
@@ -199,6 +213,7 @@
         </div>
       </div>
     </div>
+    <!-- add player end -->
   </div>
 </template>
 

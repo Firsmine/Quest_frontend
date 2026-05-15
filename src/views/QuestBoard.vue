@@ -1,4 +1,4 @@
-// get quest, add quest, delete quest
+<!-- get quest, add quest, delete quest -->
 
 <template>
   <div class="p-8 bg-slate-50 min-h-screen">

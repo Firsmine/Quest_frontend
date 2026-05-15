@@ -1,7 +1,8 @@
-// get achievement, add achievement, update achievement
+<!-- get achievement, add achievement, update achievement -->
 
 <template>
   <div class="p-8 bg-slate-50 min-h-screen">
+    <!-- header -->
     <header class="flex justify-between items-center mb-6">
       <h1 class="text-slate-800 font-extrabold text-3xl mb-1">Achievements</h1>
       <button
@@ -12,10 +13,12 @@
       </button>
     </header>
 
+    <!-- loading -->
     <div v-if="loading" class="flex justify-center py-10">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
     </div>
 
+    <!-- search & filter bar -->
     <div v-else class="p-8">
       <div class="flex gap-4 mb-6">
         <Searchbar v-model="searchAchieve" placeholder="Cari achievement..." />

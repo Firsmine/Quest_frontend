@@ -1,4 +1,4 @@
-// get monsters, add monster, detail 1 monster, update monster, delete monster
+<!-- get monsters, add monster, detail 1 monster, update monster, delete monster -->
 
 <template>
   <div class="p-8 bg-slate-50 min-h-screen">
@@ -21,7 +21,7 @@
         class="flex flex-col md:flex-row gap-4 mb-6 p-4 bg-white rounded-xl shadow-sm border border-slate-200"
       >
         <Searchbar v-model="searchQuery" placeholder="Cari monster..." />
-        <!-- To do: tambahkan fitur sorting -wiko -->
+        <!-- To do: tambahkan fitur sorting based on level -wiko -->
       </div>
 
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">

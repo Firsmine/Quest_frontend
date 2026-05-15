@@ -1,3 +1,5 @@
+<!-- post battle, history battle, recover -->
+
 <template>
   <div class="min-h-screen bg-slate-50 p-6">
     <header class="mb-8 p-3 flex flex-col md:flex-row md:items-center justify-between gap-4">
